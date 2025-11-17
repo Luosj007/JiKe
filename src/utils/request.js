@@ -1,6 +1,6 @@
 // axios的封装
 import axios from 'axios'
-import {getToken} from './token'
+import { getToken } from '@/utils'
 // 1.根域名配置
 // 2.超时时间
 // 3.请求拦截器/响应拦截器
