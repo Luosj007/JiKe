@@ -47,6 +47,13 @@ const Publish = () => {
     // 2.调用接口提交
     createArticleAPI(reqData)
   }
+
+    // 上传回调
+  const [imageList, setImageList] = useState([])
+  const onChange = (value) => {
+    console.log("112",value);
+    setImageList(value.fileList)
+  }
   return (
     <div className="publish">
       <Card
@@ -84,6 +91,30 @@ const Publish = () => {
               ))}
             </Select>
           </Form.Item>
+
+          <Form.Item label="封面">
+            <Form.Item name="type">
+              <Radio.Group>
+                <Radio value={1}>单图</Radio>
+                <Radio value={3}>三图</Radio>
+                <Radio value={0}>无图</Radio>
+              </Radio.Group>
+            </Form.Item>
+            {/* listType是决定文件筐的外观 */}
+            {/* showUploadList是决定显示上传列表 */}
+            <Upload
+              name="image"
+              listType="picture-card"
+              showUploadList
+              action={'http://geek.itheima.net/v1_0/upload'}
+              onChange={onChange}
+            >
+              <div style={{ marginTop: 8 }}>
+                <PlusOutlined />
+              </div>
+            </Upload>
+          </Form.Item>       
+
           <Form.Item
             label="内容"
             name="content"
