@@ -6,7 +6,8 @@ const Home = () => {
       <BarChart
         title={['三大框架满意度']}
         xData={['Vue', 'React', 'Angular']}
-        sData={[2000, 5000, 1000]} />
+        sData={[2000, 5000, 1000]}
+        style={{ width: '500px', height: '400px' }} />
 
       <BarChart
         title={['三大框架使用度']}

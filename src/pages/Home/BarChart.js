@@ -16,7 +16,7 @@ const BarChart = ({ title, xData, sData, style = { width: '400px', height: '300p
         data: xData
       },
       yAxis: {
-        type: 'value'
+        type: 'value',
       },
       series: [
         {
