@@ -16,7 +16,7 @@ import './index.scss'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import { useEffect, useState } from 'react'
-import { createArticleAPI, getArticleById } from '@/apis/article'
+import { createArticleAPI, getArticleById, updateArticleAPI } from '@/apis/article'
 import { useChannel } from '@/hook/useChannel'
 
 const { Option } = Select
@@ -36,12 +36,28 @@ const Publish = () => {
       content,
       cover: {
         type: imageType,
-        images: imageList.map(item => item.response.data.url)
+        // 编辑的时候额外处理
+        images: imageList.map(item =>{
+          if (item.response) {
+            return item.response.data.url
+          } else {
+            return item.url
+          }
+        })
       },
       channel_id
     }
     // 2.调用接口提交
-    createArticleAPI(reqData)
+    // 处理编辑或新增状态的接口
+    if(articleId){
+      
+      //更新
+      updateArticleAPI({...reqData, id:articleId})
+      message.success('更新成功')
+
+    } else {
+      createArticleAPI(reqData)
+    }
   }
 
     // 上传回调
