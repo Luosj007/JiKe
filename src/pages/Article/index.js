@@ -127,6 +127,15 @@ const Article = () => {
     // 4.拉取文章列表 + 渲染table逻辑重复
     // 副作用函数[reqData]，自动完成
   } 
+
+  // 分页方法
+  const onPageChange = (page) =>{
+    console.log(page)
+    setReqData({
+      ...reqData,
+      page
+    })
+  }
   return (
     <div>
       <Card
@@ -171,7 +180,11 @@ const Article = () => {
         </Form>
       </Card>
       <Card title={`根据筛选条件共查询到 ${count} 条结果：`}>
-        <Table rowKey="id" columns={columns} dataSource={list} />
+        <Table rowKey="id" columns={columns} dataSource={list} pagination={{
+          total: count,
+          pageSize: reqData.per_page,
+          onChange: onPageChange
+        }}/>
       </Card>      
     </div>
   )
