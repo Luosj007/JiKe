@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select } from 'antd'
+import { Card, Breadcrumb, Form, Button, Radio, DatePicker, Select, Popconfirm } from 'antd'
 import locale from 'antd/es/date-picker/locale/zh_CN'// 汉化包，时间的
 // 导入
 import { Table, Tag, Space } from 'antd'
@@ -7,7 +7,7 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons'
 import img404 from '@/assets/error.png'
 import { useChannel } from '@/hook/useChannel'
 import { useEffect, useState } from 'react'
-import { getArticleListAPI } from '@/apis/article'
+import { delArticleAPI, getArticleListAPI } from '@/apis/article'
 
 const { Option } = Select
 const { RangePicker } = DatePicker
@@ -64,32 +64,24 @@ const Article = () => {
         return (
           <Space size="middle">
             <Button type="primary" shape="circle" icon={<EditOutlined />} />
-            <Button
-              type="primary"
-              danger
-              shape="circle"
-              icon={<DeleteOutlined />}
-            />
+            <Popconfirm
+              title="确认删除该条文章吗?"
+              onConfirm={() => onConfirm(data)}
+              okText="确认"
+              cancelText="取消"
+            >
+              <Button
+                type="primary"
+                danger
+                shape="circle"
+                icon={<DeleteOutlined />}
+              />
+            </Popconfirm>
           </Space>
         )
       }
     }
-  ]
-  // 准备表格body数据
-  const data = [
-    {
-      id: '8218',
-      comment_count: 0,
-      cover: {
-        images: [],
-      },
-      like_count: 0,
-      pubdate: '2019-03-11 09:00:00',
-      read_count: 2,
-      status: 2,
-      title: 'wkwebview离线化加载h5资源解决方案'
-    }
-  ]  
+  ] 
 
   // 筛选功能
   // 1.准备参数
@@ -136,6 +128,16 @@ const Article = () => {
       page
     })
   }
+
+  // 删除
+  const onConfirm = async (data) => {
+    console.log('删除',data)
+    await delArticleAPI(data.id)
+    setReqData({
+      ...reqData
+    })
+  }
+
   return (
     <div>
       <Card
