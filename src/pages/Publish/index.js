@@ -11,12 +11,12 @@ import {
   message
 } from 'antd'
 import { PlusOutlined } from '@ant-design/icons'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import './index.scss'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
-import { useState } from 'react'
-import { createArticleAPI } from '@/apis/article'
+import { useEffect, useState } from 'react'
+import { createArticleAPI, getArticleById } from '@/apis/article'
 import { useChannel } from '@/hook/useChannel'
 
 const { Option } = Select
@@ -47,7 +47,7 @@ const Publish = () => {
     // 上传回调
   const [imageList, setImageList] = useState([])
   const onChange = (value) => {
-    // console.log("图片上传中",value);
+    console.log("图片上传中",value)
     setImageList(value.fileList)
   }
 
@@ -57,6 +57,32 @@ const Publish = () => {
     console.log("切换",e.target.value)
     setImageType(e.target.value)
   }
+
+  // 编辑文章-回显数据
+  const [ searchParams ] = useSearchParams()
+  const articleId = searchParams.get('id')
+  // 获取实例
+  const [form] = Form.useForm()
+  console.log(articleId);
+  useEffect(() => {
+    async function getArticleDetail() {
+      const res = await getArticleById(articleId)
+      const data = res.data
+      // 解构一下
+      const { cover } = data
+      form.setFieldsValue({
+        ...data,
+        type:cover.type
+      })
+      // 编辑-回显图片
+      setImageType(cover.type)
+      setImageList(cover.images.map(url => {
+        return { url }
+      }))
+    }
+    getArticleDetail()
+  },[articleId, form])
+
   return (
     <div className="publish">
       <Card
@@ -73,6 +99,7 @@ const Publish = () => {
           wrapperCol={{ span: 16 }}
           initialValues={{ type: 0 }}
           onFinish={onFinish}
+          form={form}
         >
           <Form.Item
             label="标题"
@@ -105,14 +132,14 @@ const Publish = () => {
             </Form.Item>
             {/* listType是决定文件筐的外观 */}
             {/* showUploadList是决定显示上传列表 */}
-            {imageType > 0 &&
-              <Upload
-              name="image"
+            {imageType > 0 && <Upload
               listType="picture-card"
               showUploadList
               action={'http://geek.itheima.net/v1_0/upload'}
+              name="image"
               onChange={onChange}
               maxCount={imageType}
+              fileList={imageList}
             >
               <div style={{ marginTop: 8 }}>
                 <PlusOutlined />
