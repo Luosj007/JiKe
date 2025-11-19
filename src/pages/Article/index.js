@@ -14,6 +14,11 @@ const { RangePicker } = DatePicker
 
 const Article = () => {
   const { channelList } = useChannel()
+  // 定义枚举
+  const status = {
+    1:<Tag color="yellow">待审核</Tag>,
+    2:<Tag color="green">审核通过</Tag>
+  }
   const columns = [
     {
       title: '封面',
@@ -31,7 +36,11 @@ const Article = () => {
     {
       title: '状态',
       dataIndex: 'status',
-      render: data => <Tag color="green">审核通过</Tag>
+      // 状态渲染
+      // data=1待审核 =2审核通过
+      // 三元表示
+      // render: data => data === 1 ? <Tag color="yellow">待审核</Tag> : <Tag color="green">审核通过</Tag>
+      render: data => status[data]
     },
     {
       title: '发布时间',
