@@ -1,6 +1,7 @@
 // 放置文章相关的请求
 import { request } from "@/utils"
 
+// 获取频道
 export function getChannelAPI() {
   return request({
     url: '/channels',
@@ -8,10 +9,20 @@ export function getChannelAPI() {
   })
 }
 
+// 创建文章
 export function createArticleAPI(data) {
   return request({
     url: '/mp/articles?draft=false',
     method: 'POST',
     data
+  })
+}
+
+// 获取文章列表
+export function getArticleListAPI(params) {
+  return request({
+    url: '/mp/articles',
+    method: 'GET',
+    params
   })
 }
