@@ -51,8 +51,15 @@ const Publish = () => {
     // 上传回调
   const [imageList, setImageList] = useState([])
   const onChange = (value) => {
-    console.log("112",value);
+    // console.log("图片上传中",value);
     setImageList(value.fileList)
+  }
+
+  // 切换图片上传个数
+  const [imageType, setImageType] = useState([])
+  const onTypeChange = (e) => {
+    console.log("切换",e.target.value)
+    setImageType(e.target.value)
   }
   return (
     <div className="publish">
@@ -68,7 +75,7 @@ const Publish = () => {
         <Form
           labelCol={{ span: 4 }}
           wrapperCol={{ span: 16 }}
-          initialValues={{ type: 1 }}
+          initialValues={{ type: 0 }}
           onFinish={onFinish}
         >
           <Form.Item
@@ -94,7 +101,7 @@ const Publish = () => {
 
           <Form.Item label="封面">
             <Form.Item name="type">
-              <Radio.Group>
+              <Radio.Group onChange={onTypeChange}>
                 <Radio value={1}>单图</Radio>
                 <Radio value={3}>三图</Radio>
                 <Radio value={0}>无图</Radio>
@@ -102,7 +109,8 @@ const Publish = () => {
             </Form.Item>
             {/* listType是决定文件筐的外观 */}
             {/* showUploadList是决定显示上传列表 */}
-            <Upload
+            {imageType > 0 &&
+              <Upload
               name="image"
               listType="picture-card"
               showUploadList
@@ -112,7 +120,8 @@ const Publish = () => {
               <div style={{ marginTop: 8 }}>
                 <PlusOutlined />
               </div>
-            </Upload>
+            </Upload>}
+
           </Form.Item>       
 
           <Form.Item
